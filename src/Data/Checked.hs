@@ -12,7 +12,7 @@ module Data.Checked
   , check
   ) where
 
--- | Wrapper-evidence for property @p@.
+-- | Wrapper-evidence for property /p/.
 newtype Checked p v = Checked v
 
 -- | Use when the property can be deduced without a runtime check.
@@ -30,7 +30,7 @@ class Property p v where
   --   The first argument is supposed to be ignored.
   holds ∷ p → v → Bool
 
--- | Return @Just v@ if @p@ holds and @Nothing@ overwise.
+-- | Return 'Just' /v/ if /p/ holds and 'Nothing' overwise.
 maybeHolds ∷ Property p v ⇒ p → v → Maybe v
 maybeHolds p v | holds p v = Just v
                | otherwise = Nothing
