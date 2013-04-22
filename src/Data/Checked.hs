@@ -16,9 +16,13 @@ module Data.Checked
   ) where
 
 import Data.Typeable (Typeable)
+import Control.DeepSeq (NFData(..))
 
 -- | Wrapper-evidence for property /p/.
 newtype Checked p v = Checked v deriving Typeable
+
+instance NFData v ⇒ NFData (Checked p v) where
+  rnf (Checked v) = rnf v
 
 -- | Use when the property can be deduced without a runtime check.
 trustMe ∷ v → Checked p v
