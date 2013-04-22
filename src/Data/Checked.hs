@@ -7,6 +7,7 @@
 module Data.Checked
   ( Checked
   , trustMe
+  , trustThat
   , trustMap
   , checked
   , Property(..)
@@ -23,6 +24,11 @@ newtype Checked p v = Checked v deriving Typeable
 trustMe ∷ v → Checked p v
 trustMe = Checked
 {-# INLINE trustMe #-}
+
+-- | Use when the property can be deduced without a runtime check.
+trustThat ∷ p → v → Checked p v
+trustThat _ = Checked
+{-# INLINE trustThat #-}
 
 -- | Apply a fuction that preserves the property to the checked value.
 trustMap ∷ (v → v) → Checked p v → Checked p v
