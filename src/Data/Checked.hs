@@ -1,4 +1,5 @@
 {-# LANGUAGE UnicodeSyntax #-}
+{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 
@@ -13,8 +14,10 @@ module Data.Checked
   , check
   ) where
 
+import Data.Typeable (Typeable)
+
 -- | Wrapper-evidence for property /p/.
-newtype Checked p v = Checked v
+newtype Checked p v = Checked v deriving Typeable
 
 -- | Use when the property can be deduced without a runtime check.
 trustMe ∷ v → Checked p v
