@@ -6,6 +6,7 @@
 module Data.Checked
   ( Checked
   , trustMe
+  , trustMap
   , checked
   , Property(..)
   , maybeHolds
@@ -19,6 +20,11 @@ newtype Checked p v = Checked v
 trustMe ∷ v → Checked p v
 trustMe = Checked
 {-# INLINE trustMe #-}
+
+-- | Apply a fuction that preserves the property to the checked value.
+trustMap ∷ (v → v) → Checked p v → Checked p v
+trustMap f (Checked v) = Checked (f v)
+{-# INLINE trustMap #-}
 
 -- | Unwrap the checked value.
 checked ∷ Checked p v → v
