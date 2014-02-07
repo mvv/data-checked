@@ -1,5 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
-
 -- | Type-indexed runtime-checked properties.
 module Data.Checked
   ( Checked
@@ -18,11 +16,10 @@ module Data.Checked
   , (~||)
   ) where
 
-import Data.Typeable (Typeable)
 import Control.DeepSeq (NFData(..))
 
 -- | Wrapper-evidence for property /p/.
-newtype Checked p v = Checked v deriving Typeable
+newtype Checked p v = Checked v
 
 instance NFData v => NFData (Checked p v) where
   rnf (Checked v) = rnf v
