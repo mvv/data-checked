@@ -7,13 +7,19 @@ module Data.Checked
   , Property
   , property
   , maybeHolds
+  , holds
   , check
   , I
   , U
+  , Not
   , pand
   , (~&&)
   , por
   , (~||)
+  , pnot
+  , commute
+  , associateL
+  , associateR
   ) where
 
 import Control.DeepSeq (NFData(..))
@@ -66,6 +72,9 @@ newtype I p1 p2 = I (p1, p2)
 -- | Property union
 newtype U p1 p2 = U (p1, p2)
 
+-- | Property negation
+newtype Not p1 = Not p1
+
 -- | Property intersect (p1 AND p2). p1 is checked first
 pand :: Property p1 v -> Property p2 v -> Property (I p1 p2) v
 pand p1 p2 = Property (\v -> holds p1 v && holds p2 v)
@@ -86,3 +95,26 @@ por p1 p2 = Property (\v -> holds p1 v || holds p2 v)
 (~||) = por
 {-# INLINABLE (~||) #-}
 
+-- | Property negation (NOT c)
+pnot :: Property p1 v -> Property (Not p1) v
+pnot p = Property (not . holds p)
+
+class Logical l where
+    logic :: l p1 p2 -> l p1 p2
+
+instance Logical I where
+    logic = id
+
+instance Logical U where
+    logic = id
+
+commute :: Logical l => Checked (l p1 p2) v -> Checked (l p2 p1) v
+commute = Checked . checked
+
+associateL :: Logical l => Checked (l p1 (l p2 p3)) v
+    -> Checked (l (l p1 p2) p3) v
+associateL = Checked . checked
+
+associateR :: Logical l => Checked (l (l p1 p2) p3) v
+    -> Checked (l p1 (l p2 p3)) v
+associateR = Checked . checked
