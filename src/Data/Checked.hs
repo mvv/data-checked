@@ -3,9 +3,8 @@
 -- | Type-indexed runtime-checked properties.
 module Data.Checked
   ( Checked
-  , trustMe
   , trustThat
-  , trustMap
+  , preserving
   , checked
   , Property(..)
   , maybeHolds
@@ -22,19 +21,14 @@ instance NFData v => NFData (Checked p v) where
   rnf (Checked v) = rnf v
 
 -- | Use when the property can be deduced without a runtime check.
-trustMe :: v -> Checked p v
-trustMe = Checked
-{-# INLINE trustMe #-}
-
--- | Use when the property can be deduced without a runtime check.
 trustThat :: p -> v -> Checked p v
 trustThat _ = Checked
 {-# INLINE trustThat #-}
 
 -- | Apply a fuction that preserves the property to the checked value.
-trustMap :: (v -> v) -> Checked p v -> Checked p v
-trustMap f (Checked v) = Checked (f v)
-{-# INLINE trustMap #-}
+preserving :: p -> (v -> v) -> Checked p v -> Checked p v
+preserving _ f (Checked v) = Checked (f v)
+{-# INLINE preserving #-}
 
 -- | Unwrap the checked value.
 checked :: Checked p v -> v
