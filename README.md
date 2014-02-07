@@ -19,12 +19,14 @@ import Data.Checked
 
 data Even = Even
 
-isEven :: Integral n => Property Even n isEven = property even
+isEven :: Integral n => Property Even n
+isEven = property Even even
 
-showEven :: Show n => Checked Even n -> String showEven = show . checked
+showEven :: Show n => Checked Even n -> String
+showEven = show . checked
 
-double :: Integral n => n -> Checked Even n double n = trustThat Even (n
-* 2)
+double :: Integral n => n -> Checked Even n
+double n = trustThat Even (n * 2)
 
 timesEven :: Integral n => n -> Checked Even n -> Checked Even n
 timesEven a = preserving Even (*a)
@@ -43,7 +45,8 @@ import Evens import Data.Checked
 
 data Small = Small
 
-small :: (Num n, Ord n) => Property Small n small = property (<100)
+small :: (Num n, Ord n) => Property Small n
+small = property Small (<100)
 
 showSmallEven :: Show n => Checked (I Small Even) n -> String
 showSmallEven = show . checked
