@@ -1,5 +1,5 @@
 Name: data-checked
-Version: 0.2
+Version: 0.3
 Category: Data
 Stability: experimental
 Synopsis: Type-indexed runtime-checked properties 
@@ -24,7 +24,7 @@ Source-Repository head
   Location: https://github.com/mvv/data-checked.git
 
 Library
-  Build-Depends: base >= 4 && < 5
+  Build-Depends: base >= 4
                , deepseq >= 1.2
   Hs-Source-Dirs: src
   GHC-Options: -Wall
