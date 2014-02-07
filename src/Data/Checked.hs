@@ -1,6 +1,4 @@
 {-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
 
 -- | Type-indexed runtime-checked properties.
 module Data.Checked
@@ -43,20 +41,23 @@ checked :: Checked p v -> v
 checked (Checked v) = v
 {-# INLINE checked #-}
 
-class Property p v where
+newtype Property p v = Property {
   -- | Test if the property holds for the given value.
   --   The first argument is supposed to be ignored.
-  holds :: p -> v -> Bool
+    holds :: v -> Bool }
+
+property :: (v -> Bool) -> Property p v
+property = Property
 
 -- | Return 'Just' /v/ if /p/ holds and 'Nothing' overwise.
-maybeHolds :: Property p v => p -> v -> Maybe v
+maybeHolds :: Property p v -> v -> Maybe v
 maybeHolds p v | holds p v = Just v
                | otherwise = Nothing
 {-# INLINABLE maybeHolds #-}
 
 -- | Wrap the value if the property holds.
-check :: forall p v . Property p v => v -> Maybe (Checked p v)
-check v | holds (undefined :: p) v = Just (Checked v)
-        | otherwise               = Nothing
+check :: Property p v -> v -> Maybe (Checked p v)
+check p v | holds p v = Just (Checked v)
+          | otherwise = Nothing
 {-# INLINABLE check #-}
 
