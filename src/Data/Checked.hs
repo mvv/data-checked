@@ -44,8 +44,8 @@ newtype Property p v = Property {
   --   The first argument is supposed to be ignored.
     holds :: v -> Bool }
 
-property :: (v -> Bool) -> Property p v
-property = Property
+property :: p -> (v -> Bool) -> Property p v
+property _ = Property
 {-# INLINABLE property #-}
 
 -- | Return 'Just' /v/ if /p/ holds and 'Nothing' overwise.
@@ -76,7 +76,7 @@ pand p1 p2 = Property (\v -> holds p1 v && holds p2 v)
 (~&&) = pand
 {-# INLINABLE (~&&) #-}
 
--- | Property union (c1 OR c2)
+-- | Property union (p1 OR p2)
 por :: Property p1 v -> Property p2 v -> Property (U p1 p2) v
 por p1 p2 = Property (\v -> holds p1 v || holds p2 v)
 {-# INLINABLE por #-}
