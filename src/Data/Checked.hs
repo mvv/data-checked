@@ -46,6 +46,7 @@ newtype Property p v = Property {
 
 property :: (v -> Bool) -> Property p v
 property = Property
+{-# INLINABLE property #-}
 
 -- | Return 'Just' /v/ if /p/ holds and 'Nothing' overwise.
 maybeHolds :: Property p v -> v -> Maybe v
