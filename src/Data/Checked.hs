@@ -6,9 +6,16 @@ module Data.Checked
   , trustThat
   , preserving
   , checked
-  , Property(..)
+  , Property
+  , property
   , maybeHolds
   , check
+  , I
+  , U
+  , pand
+  , (~&&)
+  , por
+  , (~||)
   ) where
 
 import Data.Typeable (Typeable)
@@ -54,4 +61,30 @@ check :: Property p v -> v -> Maybe (Checked p v)
 check p v | holds p v = Just (Checked v)
           | otherwise = Nothing
 {-# INLINABLE check #-}
+
+-- | Property intersection
+newtype I p1 p2 = I (p1, p2)
+
+-- | Property union
+newtype U p1 p2 = U (p1, p2)
+
+-- | Property intersect (p1 AND p2). p1 is checked first
+pand :: Property p1 v -> Property p2 v -> Property (I p1 p2) v
+pand p1 p2 = Property (\v -> holds p1 v && holds p2 v)
+{-# INLINABLE pand #-}
+
+-- | Synonym for pand
+(~&&) :: Property p1 v -> Property p2 v -> Property (I p1 p2) v
+(~&&) = pand
+{-# INLINABLE (~&&) #-}
+
+-- | Property union (c1 OR c2)
+por :: Property p1 v -> Property p2 v -> Property (U p1 p2) v
+por p1 p2 = Property (\v -> holds p1 v || holds p2 v)
+{-# INLINABLE por #-}
+
+-- | Synonym for por
+(~||) :: Property p1 v -> Property p2 v -> Property (U p1 p2) v
+(~||) = por
+{-# INLINABLE (~||) #-}
 
