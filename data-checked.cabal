@@ -30,4 +30,5 @@ Library
   GHC-Options: -Wall
   Exposed-Modules:
     Data.Checked
+    Data.Checked.Strict
 
