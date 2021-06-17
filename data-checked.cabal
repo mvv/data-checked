@@ -1,5 +1,6 @@
 Name: data-checked
 Version: 0.3
+Cabal-Version: >= 1.8
 Category: Data
 Stability: experimental
 Synopsis: Type-indexed runtime-checked properties 
